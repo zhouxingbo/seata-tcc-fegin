@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /**
  * @author xiaojing
@@ -48,4 +49,8 @@ public class DatabaseConfiguration {
 		return jdbcTemplate;
 	}
 
+	@Bean(name = "nameUserJdbcTemplate")
+	public NamedParameterJdbcTemplate nameUserJdbcTemplate(DataSource dataSource) {
+		return new NamedParameterJdbcTemplate(dataSource);
+	}
 }
