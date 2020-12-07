@@ -16,12 +16,14 @@
 
 package com.alibaba.cloud.examples;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 import io.seata.core.context.RootContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,19 +49,19 @@ public class AccountController {
 		this.random = new Random();
 	}
 
+	@Autowired
+	private AccountService accountService;
+
 	@PostMapping(value = "/account", produces = "application/json")
 	public String account(String userId, int money) {
 		LOGGER.info("Account Service ... xid: " + RootContext.getXID());
-
 		if (random.nextBoolean()) {
 			throw new RuntimeException("this is a mock Exception");
 		}
+		boolean result = accountService.prepareDecreaseAccount(null, Long.parseLong(userId), new BigDecimal(money));
 
-		int result = jdbcTemplate.update(
-				"update account_tbl set money = money - ? where user_id = ?",
-				new Object[] { money, userId });
 		LOGGER.info("Account Service End ... ");
-		if (result == 1) {
+		if (result) {
 			return SUCCESS;
 		}
 		return FAIL;

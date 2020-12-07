@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /**
  * @author xiaojing
@@ -49,6 +50,11 @@ public class DatabaseConfiguration {
 				"insert into account_tbl(user_id, money) values ('U100001', 10000)");
 
 		return jdbcTemplate;
+	}
+
+	@Bean(name = "nameUserJdbcTemplate")
+	public NamedParameterJdbcTemplate nameUserJdbcTemplate(DataSource dataSource) {
+		return new NamedParameterJdbcTemplate(dataSource);
 	}
 
 }
